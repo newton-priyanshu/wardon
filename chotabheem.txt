@@ -1,0 +1,59 @@
+This means GitHub's main branch already has commits that your local main doesn't have. Git is preventing your push because it would overwrite those remote changes.
+
+Safest fix
+
+Run:
+
+git pull origin main --rebase
+
+Then:
+
+git push origin main
+If you get conflicts
+
+Git will tell you which files have conflicts. After fixing them:
+
+git add .
+git rebase --continue
+
+Repeat until the rebase finishes, then:
+
+git push origin main
+If you DON'T care about what's currently on GitHub
+
+If the GitHub repository only contains something like a README, .gitignore, or an unwanted initial commit, and you want your local project to completely replace the GitHub main branch, use:
+
+git push origin main --force
+
+⚠️ Be careful: --force overwrites the remote main history.
+
+What is happening
+
+Think of it like this:
+
+Your computer:
+A ── B ── C
+          ↑
+        main
+
+GitHub:
+A ── D ── E
+          ↑
+        main
+
+Git sees that the two branches have diverged:
+
+        B ── C   ← local
+       /
+A
+       \
+        D ── E   ← GitHub
+
+A normal git push isn't allowed because Git cannot simply move GitHub's main forward without losing D and E.
+
+If this is a new GitHub repository and you just created it with a README, I'd recommend:
+
+git pull origin main --rebase
+git push origin main
+
+If you tell me what commands you ran before getting this error, I can tell you exactly which option you should use.
